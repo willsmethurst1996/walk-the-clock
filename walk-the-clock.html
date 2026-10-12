@@ -1,0 +1,1204 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#173f32">
+<title>Walk the Clock</title>
+
+<style>
+:root {
+  color-scheme: light dark;
+  --bg: #f5f2e9;
+  --panel: #fffdf7;
+  --text: #21352c;
+  --muted: #718078;
+  --green: #245d46;
+  --green2: #367a5b;
+  --gold: #bd9745;
+  --border: #dcded4;
+  --soft: #e8eee6;
+  --danger: #b94c43;
+  --shadow: 0 4px 18px #172b2010;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121b17;
+    --panel: #1c2922;
+    --text: #edf3eb;
+    --muted: #a1b1a5;
+    --green: #8bc6a3;
+    --green2: #5fa980;
+    --gold: #d9b766;
+    --border: #35473c;
+    --soft: #25382c;
+    --danger: #ff8b80;
+    --shadow: 0 4px 18px #00000018;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  line-height: 1.5;
+}
+
+button, input, select { font: inherit; }
+
+button { cursor: pointer; }
+
+header {
+  background: #173f32;
+  color: #fff8e8;
+  padding: 23px 18px;
+  border-bottom: 3px solid #bd9745;
+}
+
+.header-inner, main, footer {
+  max-width: 760px;
+  margin: auto;
+}
+
+.brand {
+  font-size: 1.65rem;
+  font-weight: 850;
+  letter-spacing: -0.8px;
+}
+
+.brand span { color: #e2c16f; }
+
+.tagline {
+  color: #d1dfd5;
+  font-size: .88rem;
+  margin-top: 2px;
+}
+
+main { padding: 18px 14px 35px; }
+
+nav {
+  display: flex;
+  gap: 7px;
+  margin-bottom: 18px;
+  overflow-x: auto;
+}
+
+.tab {
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  padding: 10px 13px;
+  border-radius: 12px;
+  white-space: nowrap;
+  font-weight: 650;
+}
+
+.tab.active {
+  background: var(--green);
+  color: #fff;
+  border-color: var(--green);
+}
+
+@media (prefers-color-scheme: dark) {
+  .tab.active { color: #102319; }
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 15px;
+  box-shadow: var(--shadow);
+}
+
+h1, h2, h3, p { margin-top: 0; }
+
+h1 { font-size: 1.5rem; margin-bottom: 5px; }
+h2 { font-size: 1.15rem; margin-bottom: 12px; }
+h3 { font-size: 1rem; margin-bottom: 7px; }
+
+.muted { color: var(--muted); font-size: .9rem; }
+
+label {
+  display: block;
+  font-weight: 650;
+  font-size: .9rem;
+  margin-bottom: 5px;
+}
+
+input, select {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 44px;
+}
+
+input:focus, select:focus, button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.field { margin-bottom: 14px; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.btn {
+  border: 0;
+  border-radius: 11px;
+  padding: 12px 15px;
+  font-weight: 750;
+  background: var(--green);
+  color: #fff;
+  width: 100%;
+  min-height: 46px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .btn { color: #102319; }
+}
+
+.btn.secondary {
+  background: var(--soft);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn.danger {
+  background: var(--danger);
+  color: #fff;
+}
+
+.btn:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.button-row {
+  display: flex;
+  gap: 9px;
+  margin-top: 12px;
+}
+
+.button-row > * { flex: 1; }
+
+.notice {
+  padding: 12px;
+  border-radius: 11px;
+  background: var(--soft);
+  font-size: .9rem;
+  overflow-wrap: anywhere;
+}
+
+.notice.error { border-left: 4px solid var(--danger); }
+.notice.good { border-left: 4px solid var(--green2); }
+
+.hidden { display: none !important; }
+
+.hero {
+  text-align: center;
+  padding: 10px 0 15px;
+}
+
+.clock {
+  font-size: clamp(2.7rem, 12vw, 4rem);
+  font-weight: 850;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -2px;
+  line-height: 1.15;
+  margin: 8px 0;
+}
+
+.clock-label { color: var(--muted); font-size: .85rem; }
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.stat {
+  background: var(--soft);
+  padding: 13px;
+  border-radius: 12px;
+  min-width: 0;
+}
+
+.stat .value {
+  font-size: 1.4rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.stat .label {
+  color: var(--muted);
+  font-size: .8rem;
+}
+
+.progress {
+  height: 9px;
+  background: var(--soft);
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 9px 0 15px;
+}
+
+.progress > div {
+  height: 100%;
+  background: var(--green2);
+  width: 0%;
+  transition: width .3s;
+}
+
+.rule-row, .history-row, .score-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.rule-row:last-child, .history-row:last-child,
+.score-row:last-child { border-bottom: 0; }
+
+.rule-row span:first-child,
+.score-row span:first-child { color: var(--muted); }
+
+.rule-row span:last-child,
+.score-row span:last-child { text-align: right; font-weight: 700; }
+
+.score-total {
+  font-size: 2.7rem;
+  font-weight: 850;
+  color: var(--green);
+}
+
+.small { font-size: .8rem; }
+
+footer {
+  padding: 0 18px 25px;
+  color: var(--muted);
+  font-size: .8rem;
+}
+
+@media (max-width: 430px) {
+  main { padding: 13px 10px 28px; }
+  .panel { padding: 14px; }
+  .grid { gap: 9px; }
+  .button-row { flex-direction: column; }
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="header-inner">
+    <div class="brand">WALK THE <span>CLOCK</span></div>
+    <div class="tagline">Every walk is a mission.</div>
+  </div>
+</header>
+
+<main>
+  <nav aria-label="Main navigation">
+    <button class="tab active" data-tab="create">New challenge</button>
+    <button class="tab" data-tab="active">Live walk</button>
+    <button class="tab" data-tab="history">History</button>
+  </nav>
+
+  <section id="createView">
+    <div class="panel">
+      <h1>Create your challenge</h1>
+      <p class="muted">Set your rules. Return to where you started.
+        See how well you score.</p>
+
+      <div class="field">
+        <label for="challengeName">Challenge name</label>
+        <input id="challengeName" maxlength="60"
+          value="The Evening Explorer">
+      </div>
+
+      <div class="grid">
+        <div class="field">
+          <label for="hours">Time limit — hours</label>
+          <input id="hours" type="number" min="0" max="23" value="1">
+        </div>
+        <div class="field">
+          <label for="minutes">Time limit — minutes</label>
+          <input id="minutes" type="number" min="1" max="59" value="36">
+        </div>
+        <div class="field">
+          <label for="distance">Minimum distance (miles)</label>
+          <input id="distance" type="number" min="0.1" max="100"
+            step="0.1" value="3">
+        </div>
+        <div class="field">
+          <label for="radius">Finish radius (metres)</label>
+          <select id="radius">
+            <option value="25">25 metres — strict</option>
+            <option value="40" selected>40 metres — standard</option>
+            <option value="60">60 metres — relaxed</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="runAllowance">Running allowance (minutes)</label>
+          <input id="runAllowance" type="number" min="0" max="180"
+            value="2">
+        </div>
+        <div class="field">
+          <label for="stopAllowance">Stopping allowance (minutes)</label>
+          <input id="stopAllowance" type="number" min="0" max="180"
+            value="2">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="finishMode">Finish rule</label>
+        <select id="finishMode">
+          <option value="precision">Precision finish — aim for the target time</option>
+          <option value="deadline">Deadline — finish before time runs out</option>
+          <option value="window">Finish window — arrive within a time range</option>
+        </select>
+      </div>
+
+      <div id="windowFields" class="grid hidden">
+        <div class="field">
+          <label for="windowEarly">Window opens (minutes)</label>
+          <input id="windowEarly" type="number" min="0" max="180"
+            value="5">
+        </div>
+        <div class="field">
+          <label for="windowLate">Window closes (minutes after target)</label>
+          <input id="windowLate" type="number" min="0" max="180"
+            value="5">
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="field">
+          <label for="tolerance">Precision tolerance (seconds)</label>
+          <input id="tolerance" type="number" min="0" max="600"
+            value="15">
+        </div>
+        <div class="field">
+          <label for="penalty">Points lost per minute</label>
+          <input id="penalty" type="number" min="0" max="30"
+            step="0.5" value="3">
+        </div>
+      </div>
+
+      <div class="notice">
+        <strong>Scoring:</strong> distance 40 points, timing 30,
+        movement rules 20, returning to the start 10.
+        Precision timing loses points for being early or late.
+        The scoring breakdown is shown after each walk.
+      </div>
+
+      <div class="button-row">
+        <button id="startBtn" class="btn">Capture GPS &amp; start</button>
+      </div>
+      <p class="muted small" style="margin-top:12px;margin-bottom:0">
+        Starting the challenge requests your current location.
+        Your starting point is recorded automatically.
+      </p>
+    </div>
+
+    <div id="setupMessage" class="notice hidden" role="status"
+      aria-live="polite"></div>
+  </section>
+
+  <section id="activeView" class="hidden">
+    <div class="panel">
+      <h1 id="liveName">Your challenge</h1>
+      <div id="liveStatus" class="notice" role="status"
+        aria-live="polite">Waiting to start.</div>
+
+      <div class="hero">
+        <div class="clock" id="elapsed">00:00:00</div>
+        <div class="clock-label">ELAPSED TIME</div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="value" id="liveDistance">0.00 mi</div>
+          <div class="label">Distance travelled</div>
+        </div>
+        <div class="stat">
+          <div class="value" id="remaining">01:36:00</div>
+          <div class="label">Time until target</div>
+        </div>
+        <div class="stat">
+          <div class="value" id="livePace">—</div>
+          <div class="label">Average pace / mile</div>
+        </div>
+        <div class="stat">
+          <div class="value" id="liveGps">Waiting</div>
+          <div class="label">GPS accuracy</div>
+        </div>
+      </div>
+
+      <h3>Distance target</h3>
+      <div class="progress"><div id="distanceProgress"></div></div>
+      <div class="rule-row">
+        <span>Finish distance from start</span>
+        <span id="homeDistance">Not measured</span>
+      </div>
+      <div class="rule-row">
+        <span>Estimated moving time</span>
+        <span id="movingTime">00:00</span>
+      </div>
+      <div class="rule-row">
+        <span>Estimated stopped time</span>
+        <span id="stoppedTime">00:00</span>
+      </div>
+      <div class="rule-row">
+        <span>Estimated running time</span>
+        <span id="runningTime">00:00</span>
+      </div>
+
+      <div class="button-row">
+        <button id="finishBtn" class="btn">Finish at starting point</button>
+        <button id="cancelBtn" class="btn secondary">Abandon walk</button>
+      </div>
+
+      <p class="muted small" style="margin-top:12px;margin-bottom:0">
+        Finish detection requires a reliable GPS fix, sufficient
+        distance from the start, and a return within the finish radius.
+        This prototype does not automatically end your walk.
+      </p>
+    </div>
+  </section>
+
+  <section id="resultsView" class="hidden">
+    <div class="panel">
+      <h1 id="resultTitle">Challenge results</h1>
+      <div id="resultStatus" class="notice"></div>
+      <div class="hero">
+        <div class="score-total" id="totalScore">0/100</div>
+        <div class="clock-label">CHALLENGE SCORE</div>
+      </div>
+
+      <h2>Score breakdown</h2>
+      <div id="scoreBreakdown"></div>
+
+      <h2 style="margin-top:20px">Walk statistics</h2>
+      <div id="resultStats"></div>
+
+      <div class="button-row">
+        <button id="newChallengeBtn" class="btn">New challenge</button>
+        <button id="historyBtn" class="btn secondary">View history</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="historyView" class="hidden">
+    <div class="panel">
+      <h1>Your walking history</h1>
+      <p class="muted">Results are stored on this device in this browser.</p>
+      <div id="historyList"></div>
+      <div class="button-row">
+        <button id="exportBtn" class="btn secondary">Export history</button>
+        <button id="clearHistoryBtn" class="btn secondary">Clear history</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Walk the Clock prototype. GPS measurements are estimates.
+  Keep your phone secure, stay aware of traffic and surroundings,
+  and never rush unsafely to meet a target.
+</footer>
+
+<script>
+"use strict";
+
+const $ = id => document.getElementById(id);
+
+const STORAGE_KEY = "walkTheClockHistory_v1";
+const MI = 1609.344;
+const EARTH = 6371000;
+
+let challenge = null;
+let session = null;
+let watchId = null;
+let timerId = null;
+let lastTick = null;
+let lastPosition = null;
+let lastMovement = "unknown";
+let lastReliablePosition = null;
+let positions = [];
+let gpsError = "";
+let sessionStart = 0;
+let elapsedSeconds = 0;
+let distanceMetres = 0;
+let movingSeconds = 0;
+let stoppedSeconds = 0;
+let runningSeconds = 0;
+let hasMovedAway = false;
+let returnDistance = null;
+let lastSampleTime = null;
+let finalised = false;
+
+function showView(name) {
+  ["create", "active", "history", "results"].forEach(v => {
+    const el = $(v + "View");
+    if (el) el.classList.toggle("hidden", v !== name);
+  });
+
+  document.querySelectorAll(".tab").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.tab === name);
+  });
+
+  if (name === "history") renderHistory();
+}
+
+document.querySelectorAll(".tab").forEach(btn => {
+  btn.addEventListener("click", () => {
+    if (session && !finalised && btn.dataset.tab !== "active") {
+      alert("Finish or abandon your current walk before leaving it.");
+      return;
+    }
+    showView(btn.dataset.tab);
+  });
+});
+
+$("finishMode").addEventListener("change", () => {
+  $("windowFields").classList.toggle(
+    "hidden", $("finishMode").value !== "window"
+  );
+});
+
+function readChallenge() {
+  const hours = Number($("hours").value);
+  const minutes = Number($("minutes").value);
+  const target = hours * 3600 + minutes * 60;
+
+  const c = {
+    name: $("challengeName").value.trim() || "Walking challenge",
+    target,
+    minDistance: Number($("distance").value),
+    radius: Number($("radius").value),
+    runAllowance: Number($("runAllowance").value) * 60,
+    stopAllowance: Number($("stopAllowance").value) * 60,
+    mode: $("finishMode").value,
+    windowEarly: Number($("windowEarly").value) * 60,
+    windowLate: Number($("windowLate").value) * 60,
+    tolerance: Number($("tolerance").value),
+    penaltyPerMinute: Number($("penalty").value)
+  };
+
+  if (!Number.isFinite(target) || target < 60 ||
+      target > 86400 || hours < 0 || minutes < 0 || minutes > 59) {
+    throw new Error("Enter a valid target duration of at least one minute.");
+  }
+  if (!Number.isFinite(c.minDistance) ||
+      c.minDistance <= 0 || c.minDistance > 100) {
+    throw new Error("Minimum distance must be greater than zero and no more than 100 miles.");
+  }
+  if ([c.runAllowance, c.stopAllowance, c.tolerance,
+       c.penaltyPerMinute, c.windowEarly, c.windowLate]
+       .some(v => !Number.isFinite(v) || v < 0)) {
+    throw new Error("Rule values must be zero or greater.");
+  }
+  if (c.penaltyPerMinute > 30 || c.tolerance > 600 ||
+      c.windowEarly > 10800 || c.windowLate > 10800) {
+    throw new Error("A rule setting is outside the permitted range.");
+  }
+
+  return c;
+}
+
+function distanceBetween(a, b) {
+  const rad = deg => deg * Math.PI / 180;
+  const dLat = rad(b.latitude - a.latitude);
+  const dLon = rad(b.longitude - a.longitude);
+  const lat1 = rad(a.latitude);
+  const lat2 = rad(b.latitude);
+
+  const h = Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1) * Math.cos(lat2) *
+    Math.sin(dLon / 2) ** 2;
+
+  return 2 * EARTH * Math.asin(Math.min(1, Math.sqrt(h)));
+}
+
+function formatTime(seconds, hoursAlways = true) {
+  seconds = Math.max(0, Math.floor(seconds));
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = seconds % 60;
+
+  if (!hoursAlways && h === 0) {
+    return String(m).padStart(2, "0") + ":" +
+      String(s).padStart(2, "0");
+  }
+
+  return String(h).padStart(2, "0") + ":" +
+    String(m).padStart(2, "0") + ":" +
+    String(s).padStart(2, "0");
+}
+
+function formatDuration(seconds) {
+  const minutes = Math.floor(Math.max(0, seconds) / 60);
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  return h ? `${h}h ${m}m` : `${m}m`;
+}
+
+function message(text, type = "") {
+  const el = $("setupMessage");
+  el.textContent = text;
+  el.className = "notice" + (type ? " " + type : "");
+}
+
+function setLiveMessage(text, type = "") {
+  $("liveStatus").textContent = text;
+  $("liveStatus").className = "notice" + (type ? " " + type : "");
+}
+
+function startChallenge() {
+  if (!("geolocation" in navigator)) {
+    message("Geolocation is not supported by this browser.", "error");
+    return;
+  }
+
+  let c;
+  try {
+    c = readChallenge();
+  } catch (err) {
+    message(err.message, "error");
+    return;
+  }
+
+  if (session && !finalised) {
+    message("A challenge is already running.", "error");
+    return;
+  }
+
+  $("startBtn").disabled = true;
+  message("Requesting your location. Please allow location access…");
+
+  navigator.geolocation.getCurrentPosition(position => {
+    const accuracy = position.coords.accuracy;
+
+    if (!Number.isFinite(accuracy) || accuracy > 100) {
+      $("startBtn").disabled = false;
+      message("GPS accuracy is too poor to set a reliable starting point. Move to a clearer area and try again.", "error");
+      return;
+    }
+
+    beginSession(c, position);
+  }, err => {
+    $("startBtn").disabled = false;
+    message(locationError(err), "error");
+  }, {
+    enableHighAccuracy: true,
+    timeout: 20000,
+    maximumAge: 0
+  });
+}
+
+function locationError(err) {
+  if (err.code === 1) {
+    return "Location permission was denied. Allow location access in your browser settings and try again.";
+  }
+  if (err.code === 2) {
+    return "Your position could not be determined. Check GPS and try somewhere with a clearer view of the sky.";
+  }
+  if (err.code === 3) {
+    return "GPS timed out. Try again when your phone has a better signal.";
+  }
+  return "Location error: " + (err.message || "unknown error");
+}
+
+function beginSession(c, position) {
+  challenge = c;
+  const start = {
+    latitude: position.coords.latitude,
+    longitude: position.coords.longitude
+  };
+
+  session = {
+    id: (crypto.randomUUID ? crypto.randomUUID() :
+      String(Date.now()) + Math.random()),
+    name: c.name,
+    startedAt: Date.now(),
+    start,
+    startAccuracy: position.coords.accuracy
+  };
+
+  positions = [{
+    latitude: start.latitude,
+    longitude: start.longitude,
+    time: position.timestamp,
+    accuracy: position.coords.accuracy
+  }];
+
+  distanceMetres = 0;
+  movingSeconds = 0;
+  stoppedSeconds = 0;
+  runningSeconds = 0;
+  elapsedSeconds = 0;
+  hasMovedAway = false;
+  returnDistance = 0;
+  lastTick = Date.now();
+  lastPosition = positions[0];
+  lastReliablePosition = positions[0];
+  lastMovement = "unknown";
+  lastSampleTime = null;
+  finalised = false;
+  gpsError = "";
+  sessionStart = Date.now();
+
+  $("liveName").textContent = c.name;
+  $("startBtn").disabled = false;
+  showView("active");
+  updateLiveUI();
+
+  timerId = setInterval(tick, 1000);
+
+  watchId = navigator.geolocation.watchPosition(onPosition, err => {
+    gpsError = locationError(err);
+    setLiveMessage(gpsError + " Tracking may be incomplete.", "error");
+  }, {
+    enableHighAccuracy: true,
+    maximumAge: 2000,
+    timeout: 20000
+  });
+
+  setLiveMessage(
+    "Challenge started. Keep this page open and your phone secure. GPS tracking is active.",
+    "good"
+  );
+}
+
+function tick() {
+  if (!session || finalised) return;
+
+  const now = Date.now();
+  elapsedSeconds = Math.max(0, (now - sessionStart) / 1000);
+
+  // Estimate movement during short gaps between GPS fixes only.
+  // Do not assume movement during long gaps or a suspended browser.
+  if (lastTick !== null && lastSampleTime !== null) {
+    const gap = (now - lastTick) / 1000;
+    if (gap > 0 && gap <= 2.5) {
+      if (lastMovement === "moving") movingSeconds += gap;
+      if (lastMovement === "stopped") stoppedSeconds += gap;
+      if (lastMovement === "running") runningSeconds += gap;
+    }
+  }
+
+  lastTick = now;
+  updateLiveUI();
+}
+
+function onPosition(position) {
+  if (!session || finalised) return;
+
+  const p = {
+    latitude: position.coords.latitude,
+    longitude: position.coords.longitude,
+    time: position.timestamp || Date.now(),
+    accuracy: position.coords.accuracy,
+    speed: position.coords.speed
+  };
+
+  if (!Number.isFinite(p.latitude) || !Number.isFinite(p.longitude) ||
+      !Number.isFinite(p.accuracy)) return;
+
+  if (p.accuracy > 50) {
+    $("liveGps").textContent = "Weak signal";
+    setLiveMessage("GPS accuracy is poor. Distance and movement estimates may be unreliable.", "error");
+    return;
+  }
+
+  $("liveGps").textContent = Math.round(p.accuracy) + " m";
+
+  if (lastReliablePosition) {
+    const gap = Math.max(0, (p.time - lastReliablePosition.time) / 1000);
+    const segment = distanceBetween(lastReliablePosition, p);
+    const speed = p.speed !== null && p.speed >= 0
+      ? p.speed
+      : (gap > 0 ? segment / gap : 0);
+
+    // Reject large jumps that are inconsistent with walking/running.
+    // The conservative filter can also reject legitimate fast movement.
+    if (gap > 0 && gap <= 30 && segment <= Math.max(80, gap * 5)) {
+      if (segment > 0.8) {
+        distanceMetres += segment;
+        hasMovedAway = true;
+      }
+
+      if (gap <= 10) {
+        if (speed < 0.5) {
+          lastMovement = "stopped";
+        } else if (speed > 2.5 && speed < 5.5) {
+          lastMovement = "running";
+        } else {
+          lastMovement = "moving";
+        }
+      } else {
+        lastMovement = "unknown";
+      }
+
+      lastSampleTime = p.time;
+      lastReliablePosition = p;
+      positions.push(p);
+
+      if (positions.length > 50000) positions.shift();
+    } else if (gap > 30) {
+      lastMovement = "unknown";
+      lastReliablePosition = p;
+      lastSampleTime = null;
+    }
+  } else {
+    lastReliablePosition = p;
+  }
+
+  lastPosition = p;
+  returnDistance = distanceBetween(session.start, p);
+  updateLiveUI();
+}
+
+function updateLiveUI() {
+  if (!challenge || !session) return;
+
+  $("elapsed").textContent = formatTime(elapsedSeconds);
+  $("liveDistance").textContent = (distanceMetres / MI).toFixed(2) + " mi";
+
+  const delta = challenge.target - elapsedSeconds;
+  const sign = delta < 0 ? "−" : "";
+  $("remaining").textContent = sign + formatTime(Math.abs(delta));
+
+  const miles = distanceMetres / MI;
+  const pace = miles > 0.01 ? elapsedSeconds / 60 / miles : null;
+  $("livePace").textContent = pace
+    ? `${Math.floor(pace)}:${String(Math.floor((pace % 1) * 60)).padStart(2, "0")} /mi`
+    : "—";
+
+  const pct = Math.min(100, miles / challenge.minDistance * 100);
+  $("distanceProgress").style.width = pct + "%";
+  $("homeDistance").textContent = returnDistance === null
+    ? "Not measured"
+    : Math.round(returnDistance) + " m";
+
+  $("movingTime").textContent = formatTime(movingSeconds, false);
+  $("stoppedTime").textContent = formatTime(stoppedSeconds, false);
+  $("runningTime").textContent = formatTime(runningSeconds, false);
+
+  const inRadius = returnDistance !== null &&
+    returnDistance <= challenge.radius;
+
+  if (inRadius && hasMovedAway) {
+    setLiveMessage("You're back within the starting radius. Check your distance and finish your challenge when ready.", "good");
+  } else if (elapsedSeconds > challenge.target) {
+    setLiveMessage("Your target time has passed. You can still finish the walk; the scoring rules will apply.", "error");
+  }
+}
+
+function calculateScore(data) {
+  const c = data.challenge;
+  const elapsed = data.elapsed;
+  const miles = data.distance / MI;
+
+  const distancePoints = Math.min(40, 40 * miles / c.minDistance);
+
+  let timingDifference = 0;
+  let timingPoints = 30;
+
+  if (c.mode === "precision") {
+    timingDifference = Math.abs(elapsed - c.target);
+    const excess = Math.max(0, timingDifference - c.tolerance);
+    timingPoints = Math.max(0, 30 - (excess / 60) * c.penaltyPerMinute);
+  } else if (c.mode === "deadline") {
+    timingDifference = Math.max(0, elapsed - c.target);
+    timingPoints = Math.max(0, 30 - (timingDifference / 60) * c.penaltyPerMinute);
+  } else {
+    const lower = Math.max(0, c.target - c.windowEarly);
+    const upper = c.target + c.windowLate;
+
+    if (elapsed < lower) timingDifference = lower - elapsed;
+    else if (elapsed > upper) timingDifference = elapsed - upper;
+
+    timingPoints = Math.max(0, 30 - (timingDifference / 60) * c.penaltyPerMinute);
+  }
+
+  const runningOver = Math.max(0, data.running - c.runAllowance);
+  const stoppingOver = Math.max(0, data.stopped - c.stopAllowance);
+
+  // Deduct movement points proportionally for exceeding either allowance.
+  // Movement estimates are approximate and may be incomplete.
+  const movementPenalty = Math.min(20,
+    (runningOver / 60) * 2 + (stoppingOver / 60) * 2);
+  const movementPoints = Math.max(0, 20 - movementPenalty);
+  const completionPoints = data.returned ? 10 : 0;
+
+  const total = Math.round(
+    distancePoints + timingPoints + movementPoints + completionPoints
+  );
+
+  const distanceMet = miles >= c.minDistance;
+  const rulesMet = runningOver === 0 && stoppingOver === 0;
+  const successful = data.returned && distanceMet && rulesMet;
+
+  return {
+    total,
+    distancePoints,
+    timingPoints,
+    movementPoints,
+    completionPoints,
+    timingDifference,
+    runningOver,
+    stoppingOver,
+    distanceMet,
+    rulesMet,
+    successful
+  };
+}
+
+function finishChallenge(manual = true) {
+  if (!session || finalised) return;
+
+  if (!lastReliablePosition) {
+    alert("There is no reliable GPS position yet. Wait for GPS to update.");
+    return;
+  }
+
+  returnDistance = distanceBetween(session.start, lastReliablePosition);
+
+  if (!hasMovedAway) {
+    alert("Walk away from your starting point first. The app needs to verify a round trip.");
+    return;
+  }
+
+  if (returnDistance > challenge.radius) {
+    alert(`You're still approximately ${Math.round(returnDistance)} metres from your starting point. Get within ${challenge.radius} metres before finishing.`);
+    return;
+  }
+
+  const data = {
+    challenge,
+    elapsed: (Date.now() - sessionStart) / 1000,
+    distance: distanceMetres,
+    moving: movingSeconds,
+    stopped: stoppedSeconds,
+    running: runningSeconds,
+    returned: true,
+    returnDistance
+  };
+
+  finalised = true;
+  cleanupTracking();
+
+  const score = calculateScore(data);
+  const result = {
+    id: session.id,
+    name: session.name,
+    date: new Date().toISOString(),
+    duration: data.elapsed,
+    distance: data.distance,
+    moving: data.moving,
+    stopped: data.stopped,
+    running: data.running,
+    returnDistance: data.returnDistance,
+    challenge: data.challenge,
+    score,
+    gpsPoints: positions.length,
+    gpsWarning: gpsError || "",
+    successful: score.successful
+  };
+
+  saveResult(result);
+  showResults(result);
+}
+
+function cleanupTracking() {
+  if (watchId !== null) {
+    navigator.geolocation.clearWatch(watchId);
+    watchId = null;
+  }
+  if (timerId !== null) {
+    clearInterval(timerId);
+    timerId = null;
+  }
+}
+
+function abandonChallenge() {
+  if (!session || finalised) return;
+  if (!confirm("Abandon this walk? It will not be saved to your history.")) return;
+
+  finalised = true;
+  cleanupTracking();
+  session = null;
+  challenge = null;
+  positions = [];
+  showView("create");
+  message("Walk abandoned. You can set up another challenge.");
+}
+
+function showResults(r) {
+  $("resultTitle").textContent = r.name;
+  $("totalScore").textContent = `${r.score.total}/100`;
+
+  $("resultStatus").textContent = r.score.successful
+    ? "Challenge completed — all mandatory targets met."
+    : "Walk recorded, but one or more mandatory targets were missed.";
+
+  $("resultStatus").className = "notice " +
+    (r.score.successful ? "good" : "error");
+
+  const rows = [
+    ["Distance target", r.score.distancePoints.toFixed(1) + " / 40"],
+    ["Time target", r.score.timingPoints.toFixed(1) + " / 30"],
+    ["Movement rules", r.score.movementPoints.toFixed(1) + " / 20"],
+    ["Return to start", r.score.completionPoints + " / 10"],
+    ["Time difference", formatDuration(r.score.timingDifference)],
+    ["Running over allowance", formatDuration(r.score.runningOver)],
+    ["Stopping over allowance", formatDuration(r.score.stoppingOver)]
+  ];
+
+  $("scoreBreakdown").innerHTML = rows.map(([label, value]) =>
+    `<div class="score-row"><span>${escapeHTML(label)}</span><span>${escapeHTML(value)}</span></div>`
+  ).join("");
+
+  const stats = [
+    ["Distance", (r.distance / MI).toFixed(2) + " miles"],
+    ["Elapsed time", formatTime(r.duration)],
+    ["Average pace", r.distance > 0
+      ? formatDuration(r.duration / (r.distance / MI)) + " per mile"
+      : "—"],
+    ["Estimated moving time", formatDuration(r.moving)],
+    ["Estimated stopped time", formatDuration(r.stopped)],
+    ["Estimated running time", formatDuration(r.running)],
+    ["Finish from start", Math.round(r.returnDistance) + " metres"],
+    ["GPS samples", r.gpsPoints],
+    ["Result", r.successful ? "Successful" : "Targets missed"]
+  ];
+
+  $("resultStats").innerHTML = stats.map(([label, value]) =>
+    `<div class="score-row"><span>${escapeHTML(label)}</span><span>${escapeHTML(String(value))}</span></div>`
+  ).join("");
+
+  if (r.gpsWarning) {
+    $("resultStats").innerHTML +=
+      `<div class="notice error">${escapeHTML(r.gpsWarning)}</div>`;
+  }
+
+  session = null;
+  challenge = null;
+  positions = [];
+  showView("results");
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+function getHistory() {
+  try {
+    const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveResult(result) {
+  try {
+    const history = getHistory();
+    history.unshift(result);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(history.slice(0, 200)));
+  } catch {
+    alert("The walk finished, but browser storage failed. Export or record the results before closing this page.");
+  }
+}
+
+function renderHistory() {
+  const history = getHistory();
+
+  if (!history.length) {
+    $("historyList").innerHTML =
+      '<p class="muted">No walks saved yet. Complete your first challenge to see your results here.</p>';
+    return;
+  }
+
+  $("historyList").innerHTML = history.map(r => {
+    const date = new Date(r.date).toLocaleString();
+    const miles = (r.distance / MI).toFixed(2);
+
+    return `<div class="history-row">
+      <div>
+        <strong>${escapeHTML(r.name)}</strong>
+        <div class="muted small">${escapeHTML(date)}</div>
+        <div class="muted small">${miles} miles · ${formatTime(r.duration)}</div>
+        <div class="small">${r.successful ? "Successful" : "Targets missed"}</div>
+      </div>
+      <div style="text-align:right">
+        <strong>${r.score.total}/100</strong>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+$("startBtn").addEventListener("click", startChallenge);
+$("finishBtn").addEventListener("click", () => finishChallenge(true));
+$("cancelBtn").addEventListener("click", abandonChallenge);
+
+$("newChallengeBtn").addEventListener("click", () => {
+  finalised = true;
+  showView("create");
+  message("Ready for your next mission.", "good");
+});
+
+$("historyBtn").addEventListener("click", () => showView("history"));
+
+$("exportBtn").addEventListener("click", () => {
+  const data = JSON.stringify(getHistory(), null, 2);
+  const blob = new Blob([data], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "walk-the-clock-history.json";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+$("clearHistoryBtn").addEventListener("click", () => {
+  if (!confirm("Delete all locally saved walking history? This cannot be undone.")) return;
+  localStorage.removeItem(STORAGE_KEY);
+  renderHistory();
+});
+
+window.addEventListener("pagehide", () => {
+  // Best-effort cleanup only. Tracking cannot be guaranteed if the
+  // browser is suspended or terminated.
+  cleanupTracking();
+});
+
+// Restore the correct initial navigation state.
+showView("create");
+</script>
+</body>
+</html>
